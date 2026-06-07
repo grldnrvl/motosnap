@@ -1,0 +1,1053 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MotoSnap // WHERE THE LENS MEETS THE THROTTLE</title>
+    <style>
+        :root {
+            --bg-base: #000000;
+            --bg-surface: #121216;
+            --accent-orange: #F97316; 
+            --accent-glow: rgba(249, 115, 22, 0.25);
+            --border-color: rgba(255, 255, 255, 0.06);
+            --text-primary: #ffffff;
+            --text-muted: #7e7e8a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-base);
+            color: var(--text-primary);
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(249, 115, 22, 0.03) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(249, 115, 22, 0.02) 0px, transparent 50%);
+            /* Prevents users from highlighting text/images across the system */
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* --- STICKY NAVIGATION BAR --- */
+        header {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 60px; 
+            z-index: 1000;
+            border-bottom: 1px solid var(--border-color);
+            background: rgba(11, 11, 13, 0.85);
+            backdrop-filter: blur(20px);
+        }
+
+        .logo-area {
+            display: flex;
+            align-items: center;
+        }
+
+        .brand-logo-container {
+            display: inline-block;
+            background: transparent;
+        }
+
+        .brand-logo-img {
+            height: 65px;
+            object-fit: contain;
+            display: block;
+        }
+
+        .nav-container {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .main-menu {
+            display: flex;
+            list-style: none;
+            gap: 35px;
+        }
+
+        .menu-item {
+            position: relative;
+            padding: 10px 0;
+        }
+
+        .menu-item > a {
+            color: var(--text-primary);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            transition: color 0.3s;
+        }
+
+        .menu-item:hover > a {
+            color: var(--accent-orange);
+        }
+
+        .sub-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            min-width: 240px;
+            list-style: none;
+            padding: 15px 0;
+            display: none;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.5);
+            border-radius: 4px;
+        }
+
+        .sub-menu li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            display: block;
+            padding: 10px 25px;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            transition: all 0.3s;
+        }
+
+        .sub-menu li a:hover {
+            color: var(--accent-orange);
+            background: rgba(255,255,255,0.02);
+            padding-left: 30px;
+        }
+
+        .menu-item:hover .sub-menu {
+            display: block;
+        }
+
+        .header-cta {
+            background: transparent;
+            border: 1px solid var(--accent-orange);
+            color: var(--text-primary);
+            padding: 10px 22px;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .header-cta:hover {
+            background: var(--accent-orange);
+            color: var(--bg-base);
+            box-shadow: 0 0 15px var(--accent-glow);
+        }
+
+        /* --- HERO SPLIT & FILTERS --- */
+        .hero-showcase {
+            min-height: 85vh;
+            padding: 180px 60px 40px 60px;
+            max-width: 1600px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1.1fr 0.9fr;
+            gap: 80px;
+            align-items: center;
+        }
+
+        .hero-content h1 {
+            font-size: 3.8rem;
+            font-weight: 800;
+            line-height: 1.15;
+            letter-spacing: -1.5px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+        }
+
+        .hero-content h1 em {
+            font-style: normal;
+            color: transparent;
+            -webkit-text-stroke: 1px #fff;
+        }
+
+        .hero-content p {
+            color: var(--text-muted);
+            font-size: 1.05rem;
+            line-height: 1.7;
+            max-width: 580px;
+            margin-bottom: 20px;
+        }
+
+        .hero-content p.highlight {
+            color: var(--text-primary);
+            font-weight: 600;
+            border-left: 2px solid var(--accent-orange);
+            padding-left: 15px;
+            margin-top: 10px;
+        }
+
+        .intercept-engine {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 45px;
+            border-radius: 6px;
+            position: relative;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .engine-tag {
+            position: absolute;
+            top: -12px; left: 30px;
+            background: var(--accent-orange);
+            color: var(--bg-base);
+            font-size: 0.65rem;
+            font-weight: 800;
+            padding: 4px 12px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .input-block {
+            margin-bottom: 25px;
+        }
+
+        .input-block label {
+            display: block;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 12px;
+            font-weight: 600;
+        }
+
+        .custom-select, .custom-time {
+            width: 100%;
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            padding: 16px;
+            color: #fff;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            outline: none;
+            border-radius: 4px;
+        }
+
+        .time-split {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .btn-search-stream {
+            width: 100%;
+            background: var(--accent-orange);
+            color: var(--bg-base);
+            border: none;
+            padding: 18px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        /* --- DASHBOARD WRAPPER (SPLIT-SCREEN) --- */
+        .dashboard-container {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 40px 60px 100px 60px;
+            display: grid;
+            grid-template-columns: 320px 1fr;
+            gap: 50px;
+            align-items: start;
+        }
+
+        /* --- STICKY LEFT SIDEBAR --- */
+        .sidebar-creators {
+            position: sticky;
+            top: 120px;
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            padding: 30px 20px;
+            border-radius: 6px;
+        }
+
+        .sidebar-creators h3 {
+            text-transform: uppercase;
+            font-size: 1rem;
+            letter-spacing: 1px;
+            margin-bottom: 20px;
+        }
+
+        .section-tagline {
+            font-size: 0.7rem;
+            color: var(--accent-orange);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+        }
+
+        .creators-vertical-stack {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .creator-logo-card {
+            background: var(--bg-base);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            height: 140px;
+        }
+
+        .creator-logo-card.active-card {
+            border-color: var(--accent-orange);
+            box-shadow: 0 0 15px rgba(249, 115, 22, 0.15);
+        }
+
+        .logo-frame {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+            overflow: hidden;
+        }
+
+        .logo-frame img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .creator-logo-card:hover {
+            border-color: var(--accent-orange);
+            transform: translateX(4px);
+        }
+
+        .creator-logo-card:hover .logo-frame img,
+        .creator-logo-card.active-card .logo-frame img {
+            filter: drop-shadow(0 0 8px var(--accent-glow));
+        }
+
+        .creator-logo-card span.photog-meta {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* --- RIGHT SIDE GALLERY AREA --- */
+        .archive-section {
+            width: 100%;
+        }
+
+        .archive-title {
+            font-size: 1.2rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            margin-bottom: 35px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            color: var(--text-muted);
+        }
+
+        .archive-title::after {
+            content: '';
+            flex-grow: 1;
+            height: 1px;
+            background: var(--border-color);
+        }
+
+        .photo-matrix {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 25px;
+        }
+
+        /* --- ANIMATION CLASS FOR NODES --- */
+        .photo-node {
+            background: var(--bg-surface);
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            overflow: hidden;
+            transition: border-color 0.3s, transform 0.3s;
+            display: none; 
+            opacity: 0;
+        }
+
+        @keyframes cyberFadeSlide {
+            0% {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .photo-node.animate-in {
+            display: block;
+            animation: cyberFadeSlide 0.5s ease-out forwards;
+        }
+
+        .photo-node:hover {
+            border-color: rgba(249, 115, 22, 0.3);
+            transform: translateY(-4px);
+        }
+
+        /* --- ADVANCED ANTI-PIRACY MEDIA CANVAS --- */
+        .media-canvas {
+            position: relative;
+            width: 100%;
+            height: 480px;
+            background: #15151a;
+            overflow: hidden;
+        }
+
+        .media-canvas img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            /* CRITICAL Layer 1: Makes the image invisible to click/drag commands */
+            pointer-events: none; 
+        }
+
+        /* CRITICAL Layer 2: Ultra Dense High-Frequency Watermark Screen Mesh */
+        .watermark-overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            /* Complex overlapping diagonal line mesh pattern */
+            background: 
+                repeating-linear-gradient(-45deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 25px, rgba(249, 115, 22, 0.02) 25px, rgba(249, 115, 22, 0.02) 50px),
+                repeating-linear-gradient(45deg, rgba(0,0,0,0) 0px, rgba(0,0,0,0) 35px, rgba(255, 255, 255, 0.015) 35px, rgba(255, 255, 255, 0.015) 70px);
+            font-size: 0.8rem;
+            font-weight: 900;
+            letter-spacing: 3px;
+            color: rgba(255, 255, 255, 0.09);
+            text-shadow: 1px 1px 1px rgba(0,0,0,0.8);
+            text-transform: uppercase;
+            pointer-events: all; /* intercepts right clicks */
+            text-align: center;
+            padding: 20px;
+            line-height: 2.2;
+            overflow: hidden;
+            word-wrap: break-word;
+        }
+
+        /* Generates a continuous grid wall of text that damages content fills */
+        .watermark-overlay::before {
+            content: "MOTOSNAP PROOF • UNAUTHORIZED USE IS ILLEGAL • NOT FOR SOCIAL MEDIA USE • MOTOSNAP PROOF • UNAUTHORIZED USE IS ILLEGAL • NOT FOR SOCIAL MEDIA USE • MOTOSNAP PROOF • UNAUTHORIZED USE IS ILLEGAL • MOTOSNAP PROOF • UNAUTHORIZED USE IS ILLEGAL • NOT FOR SOCIAL MEDIA USE • ";
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            top: -50%; left: -50%;
+            transform: rotate(-25deg);
+            opacity: 0.9;
+            display: block;
+            text-align: justify;
+        }
+
+        .node-meta { padding: 20px; }
+
+        .node-telemetry {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.65rem;
+            color: var(--text-muted);
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            margin-bottom: 12px;
+        }
+
+        .node-telemetry span strong { color: var(--accent-orange); }
+        .node-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 20px; }
+        .node-action-row { display: flex; justify-content: space-between; align-items: center; padding-top: 15px; border-top: 1px solid var(--border-color); }
+        .node-price { font-size: 1.2rem; font-weight: 700; font-family: monospace; }
+
+        .btn-claim-node {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 8px 16px;
+            font-size: 0.7rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s;
+        }
+
+        .btn-claim-node:hover {
+            border-color: var(--accent-orange);
+            color: var(--accent-orange);
+            background: rgba(249, 115, 22, 0.02);
+        }
+
+        @media(max-width: 1140px) {
+            header { padding: 15px 30px; }
+            .hero-showcase { grid-template-columns: 1fr; padding-top: 150px; gap: 60px; }
+            .hero-content h1 { font-size: 2.8rem; }
+            .dashboard-container { grid-template-columns: 1fr; padding: 20px; }
+            .sidebar-creators { position: relative; top: 0; width: 100%; margin-bottom: 30px; }
+            .creators-vertical-stack { flex-direction: row; flex-wrap: wrap; }
+            .creator-logo-card { flex: 1 1 200px; height: 140px; }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-area">
+            <div class="brand-logo-container">
+                <img src="image_754fc6.png" alt="MotoSnap Logo" class="brand-logo-img">
+            </div>
+        </div>
+        <div class="nav-container">
+            <ul class="main-menu">
+                <li class="menu-item"><a href="#">Home</a></li>
+                <li class="menu-item">
+                    <a href="#">Sectors</a>
+                    <ul class="sub-menu">
+                        <li><a href="#" onclick="alert('Filtering sector location...')">Marilaque Loop</a></li>
+                        <li><a href="#" onclick="alert('Filtering sector location...')">Quezon Route</a></li>
+                        <li><a href="#" onclick="alert('Filtering sector location...')">Big C Outpost</a></li>
+                    </ul>
+                </li>
+                <li class="menu-item"><a href="#">Media Ecosystem</a></li>
+            </ul>
+            <button class="header-cta" onclick="document.getElementById('dashboard').scrollIntoView({behavior: 'smooth'});">Direct Stream</button>
+        </div>
+    </header>
+
+    <section class="hero-showcase">
+        <div class="hero-content">
+            <div style="color: var(--accent-orange); font-size: 0.8rem; letter-spacing: 4px; margin-bottom: 15px;">Capture every moment</div>
+            <h1>Where the Lens<br>Meets the <em>Throttle.</em></h1>
+            <p>Stop letting epic moments get lost in the noise of generic social media timelines. This platform is a curated archive of the open road, designed exclusively for two-wheel enthusiasts and the creators who brave the elements to capture them.</p>
+            <p class="highlight">It’s sleek, it’s instant, and it’s built to honor the culture. Find your spirit in motion, or showcase the art you created on the asphalt.</p>
+        </div>
+        
+        <div class="intercept-engine">
+            <div class="engine-tag">Timeline Filter Hub</div>
+            <form onsubmit="event.preventDefault(); alert('Scanning location timeline coordinates...');">
+                <div class="input-block">
+                    <label>Target Coordinate Sector (Location)</label>
+                    <select class="custom-select" required>
+                        <option value="" disabled selected hidden>Choose capture zone...</option>
+                        <option value="marilaque" selected>Marilaque (Apex Sweepers)</option>
+                        <option value="quezon">Quezon Route Matrix</option>
+                        <option value="bigc">Big C Outpost</option>
+                    </select>
+                </div>
+                <div class="input-block">
+                    <label>Telemetry Window (Time Range)</label>
+                    <div class="time-split">
+                        <div><input type="time" class="custom-time" value="08:00" required></div>
+                        <div><input type="time" class="custom-time" value="12:00" required></div>
+                    </div>
+                </div>
+                <button type="submit" class="btn-search-stream">Isolate Capture Nodes</button>
+            </form>
+        </div>
+    </section>
+
+    <div class="dashboard-container" id="dashboard">
+        
+        <aside class="sidebar-creators">
+            <div class="section-tagline">-------------------------------------</div>
+            <h3>Creators</h3>
+            
+            <div class="creators-vertical-stack">
+                <div class="creator-logo-card active-card" id="jids-btn" onclick="filterGallery('jids-photography', this)">
+                    <div class="logo-frame">
+                        <img src="Jids.jpg" alt="Jids Photography Logo">
+                    </div>
+                    <span class="photog-meta">Jids Photography</span>
+                </div>
+                <div class="creator-logo-card" id="lensilore-btn" onclick="filterGallery('lensilore', this)">
+                    <div class="logo-frame">
+                        <img src="Lensilore.jpg" alt="Lensilore Logo">
+                    </div>
+                    <span class="photog-meta">Lensilore</span>
+                </div>
+            </div>
+        </aside>
+
+        <section class="archive-section">
+            <div class="archive-title" id="gallery-status">Isolate Encounters // Stream Matrix: JIDS PHOTOGRAPHY</div>
+
+            <div class="photo-matrix">
+                
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="702250292_122131907613150864_3647762338198900059_n.jpg" alt="Classic bobber cruiser run">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Classic Bobber Asphalt Cruise</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="701487293_122132011401150864_4429177280912337767_n.jpg" alt="Aggressive sports bike corner drag">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Deep Knee-Down Apex Attack</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱350.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705031836_122132115459150864_5802206161002478269_n.jpg" alt="Scrambler setup street run">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Scrambler Urban Telemetry Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705381677_122132130879150864_2882150321839811704_n.jpg" alt="Sports scooter heavy cornering">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Precision High-Angle Scooter Lean</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705878219_122132612439150864_189388092857874409_n.jpg" alt="Rider with visor statement helmet">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Statement Helmet Custom Graphic Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705989646_122132713629150864_6185813013754263641_n.jpg" alt="Track racing lines sync drag">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Dual Racing Line Apex Sync</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱350.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="709486149_122132747247150864_7014367535529164746_n.jpg" alt="White modern vintage look scooter">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Vintage Aesthetic Cruiser Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="709760239_122132827749150864_5854172638562281386_n.jpg" alt="Silver classic shape vespa profile">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Modern Classic Scooter Telemetry</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="713225013_122133398151150864_5776569971711266519_n.jpg" alt="Pillion Vlogging Tandem Run">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Pillion Vlogging Tandem Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="jids-photography">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="710193142_122133427773150864_8842941894065621163_n.jpg" alt="Custom plush gear team sync">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>JIDS PHOTOGRAPHY</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Custom plush gear team sync</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="703076258_122132232807150864_546536961462094581_n.jpg" alt="Maxi performance scooter sweep">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Team Italjet Performance Sweep</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705387889_122132280573150864_1282236002904733286_n.jpg" alt="Matte black custom aerox run">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Matte Black Tactical Cruiser Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705745435_122132371419150864_6423605535803784298_n.jpg" alt="Tandem double entry curve exit">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Couples Tandem Sweep Compression</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705969521_122132390361150864_1643990910156694499_n.jpg" alt="Pillion rider tracking target loop">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Dual Threat Pillion Media Crew</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱300.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705921560_122132517513150864_5735291627568107359_n.jpg" alt="Underbone team sync gesture cornering">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Underbone Synchronization Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="705951603_122132556675150864_2180434537431660473_n.jpg" alt="Dual purpose adventure layout knobby tires">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Tracker Adventure Knobby Telemetry</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="708866752_122132862585150864_1032179104607375060_n.jpg" alt="Red superbike track carving knee slider">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Ducati Superbike Corner Carve</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱400.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="709467604_122132975049150864_4371407733931437512_n.jpg" alt="White custom style aerox double team gesture">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">White Aerox Double Gesture Run</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="709135415_122133106227150864_612419784809030979_n.jpg" alt="Dual-sport tall bike tracker waving">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Dual-Sport Trackside Wave Intercept</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="710332328_122133121875150864_6362414177253986789_n.jpg" alt="Mascot helmet modifications tracking look">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Quezon</strong></span>
+                        </div>
+                        <div class="node-title">Custom Pillion Mascot Tracking Frame</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="717358020_122134244067150864_2853272827968633781_n.jpg" alt="Dual Bow Telemetry Capture">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Dual Bow Telemetry Capture</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱250.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="photo-node" data-photographer="lensilore">
+                    <div class="media-canvas">
+                        <div class="watermark-overlay"></div>
+                        <img src="719524268_122134278933150864_3739433555295565162_n.jpg" alt="Aggressive Apex Lane Comp">
+                    </div>
+                    <div class="node-meta">
+                        <div class="node-telemetry">
+                            <span>Artist: <strong>LENSILORE</strong></span>
+                            <span>Zone: <strong>Marilaque</strong></span>
+                        </div>
+                        <div class="node-title">Aggressive Apex Lane Comp</div>
+                        <div class="node-action-row">
+                            <div class="node-price">₱350.00</div>
+                            <button class="btn-claim-node" onclick="alert('Securing file digital original...')">Claim & Buy</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Layer 3: Globally intercepts and blocks context menus (Right Click) and text selection attempts
+        document.addEventListener('contextmenu', (e) => {
+            e.preventDefault();
+        }, false);
+
+        // Blocks keyboard bypass options like Cmd+S / Ctrl+S / F12 Developer Tools basic locks
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && (e.key === 's' || e.key === 'u') || e.keyCode === 123) {
+                e.preventDefault();
+            }
+        });
+
+        function filterGallery(photographerName, clickedElement) {
+            const nodes = document.querySelectorAll('.photo-node');
+            const targetTitle = document.getElementById('gallery-status');
+            const cards = document.querySelectorAll('.creator-logo-card');
+
+            cards.forEach(card => card.classList.remove('active-card'));
+            if(clickedElement) clickedElement.classList.add('active-card');
+            
+            let runningIndex = 0;
+            nodes.forEach((node) => {
+                node.classList.remove('animate-in');
+                node.style.display = 'none';
+
+                if (node.getAttribute('data-photographer') === photographerName) {
+                    node.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        node.classList.add('animate-in');
+                    }, runningIndex * 60); 
+                    runningIndex++;
+                }
+            });
+
+            const displayArtistName = photographerName === 'jids-photography' ? 'JIDS PHOTOGRAPHY' : 'LENSILORE';
+            targetTitle.innerText = `Isolate Encounters // Stream Matrix: ${displayArtistName}`;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            filterGallery('jids-photography', document.getElementById('jids-btn'));
+        });
+    </script>
+
+</body>
+</html>
